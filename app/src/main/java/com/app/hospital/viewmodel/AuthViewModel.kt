@@ -25,52 +25,69 @@ class AuthViewModel @Inject constructor(
     val signupState: StateFlow<NetworkResult<SignupResponse>?> = _signupState
 
     fun login(username: String, password: String) {
-        // Validate
+
         if (!Validators.isValidUsername(username)) {
             _loginState.value = NetworkResult.Error("Username must be at least 3 characters")
             return
         }
+
         if (!Validators.isValidPassword(password)) {
             _loginState.value = NetworkResult.Error("Password must be at least 6 characters")
             return
         }
 
         viewModelScope.launch {
+
             _loginState.value = NetworkResult.Loading()
+
             _loginState.value = authRepository.login(username, password)
+
         }
     }
 
     fun signup(username: String, password: String, confirmPassword: String, name: String) {
+
         if (!Validators.isValidName(name)) {
             _signupState.value = NetworkResult.Error("Name must be at least 2 characters")
             return
         }
+
         if (!Validators.isValidUsername(username)) {
             _signupState.value = NetworkResult.Error("Username must be at least 3 characters")
             return
         }
+
         if (!Validators.isValidPassword(password)) {
             _signupState.value = NetworkResult.Error("Password must be at least 6 characters")
             return
         }
+
         if (!Validators.passwordsMatch(password, confirmPassword)) {
             _signupState.value = NetworkResult.Error("Passwords do not match")
             return
         }
 
         viewModelScope.launch {
+
             _signupState.value = NetworkResult.Loading()
+
             _signupState.value = authRepository.signup(username, password, name)
+
         }
     }
 
     fun logout() {
+
         viewModelScope.launch {
+
             authRepository.logout()
+
         }
+
     }
 
     fun resetLoginState() { _loginState.value = null }
+
     fun resetSignupState() { _signupState.value = null }
+
 }

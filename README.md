@@ -1,5 +1,2 @@
  
 hospital app
- 
- 
- 
